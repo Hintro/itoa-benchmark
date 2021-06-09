@@ -765,21 +765,21 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     //     memcpy(buffer, &lo8a, 8);
     // }
 
-    // lo8a = 0x30;  // ASCII 0
-    // memset(buffer+7, 0, 4);
-    // if (val >= 100000000) {
-    //     const int32_t hi2 = val/100000000;
-    //     memcpy(buffer, dLut+hi2, 2);
-    //     const int32_t lo8 = val%100000000;
-    //     buffer += val>=1000000000 ? 2 : 1;
-    //     itoa8lut(lo8, buffer);
-    // } else {
-    //     if (val) {
-    //         const int64_t decimals = itoa8lil(val);
-    //         lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(decimals));
-    //     }
-    //     memcpy(buffer, &lo8a, 8);
-    // }
+    lo8a = 0x30;  // ASCII 0
+    memset(buffer+7, 0, 4);
+    if (val >= 100000000) {
+        const int32_t hi2 = val/100000000;
+        memcpy(buffer, dLut+hi2, 2);
+        const int32_t lo8 = val%100000000;
+        buffer += val>=1000000000 ? 2 : 1;
+        itoa8lut(lo8, buffer);
+    } else {
+        if (val) {
+            const int64_t decimals = itoa8lil(val);
+            lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(decimals));
+        }
+        memcpy(buffer, &lo8a, 8);
+    }
 
 
     // lo8a = 0x30;  // ASCII 0
