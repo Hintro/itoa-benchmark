@@ -768,11 +768,22 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     lo8a = 0x30;  // ASCII 0
     memset(buffer+7, 0, 4);
     if (val >= 100000000) {
-        const int32_t hi2 = val/100000000;
-        memcpy(buffer, dLut+hi2, 2);
-        const int32_t lo8 = val%100000000;
-        buffer += val>=1000000000 ? 2 : 1;
-        itoa8lut(lo8, buffer);
+        const uint32_t hi8 = val/100;
+        char * const buf = val >= 1000000000 ? buffer : buffer-1;
+        const int32_t q = (int64_t) hi8 * e40d10000 >> 40;
+        const int32_t lo2 = val%100;
+        memcpy(buf+8, gDigitsLut+lo2*2, 2);
+        const int64_t a = -e32m10000*q + ((int64_t) hi8 << 32 | q);
+        const int64_t b = a * e19d100 & 0x3f8000003f80000ll;
+        const int64_t b25 = b*25, c = (a<<17) - b25;
+        // memcpy(buf, gDigitsLut + ((int32_t)b>>18), 2);
+        if(buffer == buf) memcpy(buffer, gDigitsLut + ((int32_t)b>>18), 2);
+        else memcpy(buffer, gDigitsLut+1 + ((int32_t)b>>18), 1);
+        memcpy(buf+2, gDigitsLut + ((int32_t)c>>16), 2);
+        memcpy(buf+4, gDigitsLut + (b>>50), 2);
+        memcpy(buf+6, gDigitsLut + (c>>48), 2);
+
+        // memcpy(buf+8, gDigitsLut+lo2*2, 2);
     } else {
         if (val) {
             const int64_t decimals = itoa8lil(val);
@@ -781,60 +792,6 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
         memcpy(buffer, &lo8a, 8);
     }
 
-
-    // lo8a = 0x30;  // ASCII 0
-    // memset(buffer+7, 0, 4);
-    // if (val >= 100000000) {
-    //     const int32_t hi2 = val/100000000;
-    //     memcpy(buffer, dLut+hi2, 2);
-    //     const int32_t lo8 = val%100000000;
-    //     buffer += val>=1000000000 ? 2 : 1;
-    //     itoa8lut(lo8, buffer);
-    // } else {
-    //     if (val) {
-    //         // // const int64_t decimals = itoa8lil2(val);
-    //         // const int32_t q = (int64_t) val * e40d10000 >> 40;
-    //         // const int64_t a = -e32m10000*q + ((int64_t) val << 32 | q);
-    //         // const int64_t b = a * e19d100 & 0x3f8000003f80000ll, b25 = b*25;
-    //         // const int64_t c = (a<<17 | b>>18) - b25, d = c * e10d10 & 0x7800780078007800ll; 
-    //         // // lo8a = (c<<9 | d>>9) + ((ascii0s<<2) - d*5);
-    //         // // lo8a >>= 2 | (56 & __builtin_ctzll(c<<9 | d>>9));
-    //         // lo8a = (c<<7 | d>>11);
-    //         // lo8a = (lo8a + ascii0s - (d*5>>2)) >> (56 & __builtin_ctzll(lo8a));
-            
-    //         const int32_t q = (int64_t) val * e40d10000 >> 40;
-    //         const int64_t a = ((int64_t) val << 32 | q) - q * e32m10000;
-    //         const int64_t b = a * e19d100 & 0x3f8000003f80000ll;
-    //         const int64_t c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll; 
-    //         lo8a = (c<<9 | d>>9);
-    //         lo8a = (lo8a - d*5 >> 2 | ascii0s) >> (__builtin_ctzll(lo8a) & 56);
-    //     }
-    //     memcpy(buffer, &lo8a, 8);
-    // }
-
-
-    // lo8a = 0x30;  // ASCII 0
-    // memset(buffer+7, 0, 4);
-    // if (val >= 100000000) {
-    //     const int32_t hi2 = val/100000000;
-    //     memcpy(buffer, dLut+hi2, 2);
-    //     const int32_t lo8 = val%100000000;
-    //     buffer += val>=1000000000 ? 2 : 1;
-    //     itoa8lut(lo8, buffer);
-    // } else {
-    //     if (val) {
-    //         // const int64_t decimals = itoa8lil2(val);
-    //         const int32_t q = (int64_t) val * e40d10000 >> 40;
-    //         const int64_t a = -e32m10000*q + ((int64_t) val << 32 | q);
-    //         const int64_t b = a * e19d100 & 0x3f8000003f80000ll, b25 = b*25;
-    //         const int64_t c = (a<<17 | b>>18) - b25, d = c * e10d10 >> 9; 
-    //         // lo8a = (c<<9 | d>>9) + ((ascii0s<<2) - d*5);
-    //         // lo8a >>= 2 | (56 & __builtin_ctzll(c<<9 | d>>9));
-    //         lo8a = (c<<9 | d&0x3c003c003c003cll);
-    //         lo8a = (lo8a>>2 | ascii0s) >> (56 & __builtin_ctzll(lo8a));
-    //     }
-    //     memcpy(buffer, &lo8a, 8);
-    // }
 }
 
 
