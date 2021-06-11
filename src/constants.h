@@ -1,7 +1,10 @@
 #include <stdint.h>
 
+using ll = long long;
+using ull = unsigned long long;
+
 const int32_t e40d10000 = (1ull << 40) / 10000 + 1, e19d100 = (1<<19) / 100 + 1, e10d10 = 103, e9d10 = 52;
-const int64_t e32m10000 = (1ull << 32) * 10000, ascii0s = 0x3030303030303030ll, e57d8 = 1441151881;
+const ll e32m10000 = (1ull << 32) * 10000, ascii0s = 0x3030303030303030ll, e57d8 = 1441151881;
 
 // const uint16_t dLut[] = {
 //        0,  '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',
@@ -66,9 +69,9 @@ const int32_t powers[14] = {
 
 uint32_t const * const powersLut = (uint32_t *) powers - 2;
 
-const uint64_t shiftLut = 0x7665443321100000ull;
+const ull shiftLut = 0x7665443321100000ull;
 
 // For sequential optimization
-const uint64_t _198 = 0xc6c6c6c6c6c6c6c6ull, _208 = 0xd0d0d0d0d0d0d0d0ull, 
+const ull _198 = 0xc6c6c6c6c6c6c6c6ull, _208 = 0xd0d0d0d0d0d0d0d0ull, 
 b10100000 = 0xa0a0a0a0a0a0a0a0ull, lo4bit = 0x0f0f0f0f0f0f0f0full, _192 = 0xc0c0c0c0c0c0c0c0ll;
 const uint8_t init_mask = 0xff;
