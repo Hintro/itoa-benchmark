@@ -822,7 +822,7 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     //     memcpy(buffer, &lo8a, 8);
     // }
 
-    // int64_t lo8a = 0x30;  // ASCII 0
+    // int64_t lo8a = '0'; 
     // memset(buffer+7, 0, 4);
     // if (val >= 100000000) {
     //     const uint32_t hi8 = val/100;
@@ -838,8 +838,6 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     //     memcpy(buf+2, gDigitsLut + ((int32_t)c>>16), 2);
     //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
     //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
-
-    //     // memcpy(buf+8, gDigitsLut+lo2*2, 2);
     // } else {
     //     if (val) {
     //         const int64_t decimals = itoa8lil(val);
@@ -873,28 +871,81 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     // memcpy(buffer+8-(shifts>>3), &lo2a, 2);
 
 
-    memset(buffer+7, 0, 4);
-    if (val < 100) {
-        const int32_t digit = val | '0';
-        int32_t toWrite;
-        memcpy(&toWrite, gDigitsLut+val*2, 2);
-        if (val < 10) toWrite = digit;
-        memcpy(buffer, &toWrite, 4);
-        return;
-    }
+    // BETTER trailing zero count
     // memset(buffer+7, 0, 4);
-    const int32_t hi8 = val/100;
-    const int32_t q = (int64_t) hi8 * e40d10000 >> 40;
-    const int32_t lo2 = val%100;
-    short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
-    const int64_t a = ((int64_t) hi8 << 32 | q) - q * e32m10000;
-    const int64_t b = a * e19d100 & 0x3f8000003f80000ll;
-    const int64_t c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
-    const ll hi8d = (c<<9 | d>>9) - d*5;
-    const int shifts = 56 & __builtin_ctzll(hi8d);
-    const ll lo8a = (hi8d>>2 | ascii0s) >> shifts;
-    memcpy(buffer, &lo8a, 8);
-    memcpy(buffer+8-(shifts>>3), &lo2a, 2);
+    // if (val < 100) {
+    //     const int32_t digit = val | '0';
+    //     int32_t toWrite;
+    //     memcpy(&toWrite, gDigitsLut+val*2, 2);
+    //     if (val < 10) toWrite = digit;
+    //     memcpy(buffer, &toWrite, 4);
+    //     return;
+    // }
+    // // memset(buffer+7, 0, 4);
+    // const int32_t hi8 = val/100;
+    // const int32_t q = (int64_t) hi8 * e40d10000 >> 40;
+    // const int32_t lo2 = val%100;
+    // short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    // const int64_t a = ((int64_t) hi8 << 32 | q) - q * e32m10000;
+    // const int64_t b = a * e19d100 & 0x3f8000003f80000ll;
+    // const int64_t c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
+    // const ll hi8d = (c<<9 | d>>9) - d*5;
+    // const int shifts = 56 & __builtin_ctzll(c<<9 | d>>9);
+    // const ll lo8a = (hi8d>>2 | ascii0s) >> shifts;
+    // memcpy(buffer, &lo8a, 8);
+    // memcpy(buffer+8-(shifts>>3), &lo2a, 2);
+
+
+    // memset(buffer+7, 0, 4);
+    // if (val < 100) {
+    //     const int32_t digit = val | '0';
+    //     int32_t toWrite;
+    //     memcpy(&toWrite, gDigitsLut+val*2, 2);
+    //     if (val < 10) toWrite = digit;
+    //     memcpy(buffer, &toWrite, 4);
+    //     return;
+    // }
+    // // memset(buffer+7, 0, 4);
+    // const int32_t hi8 = val/100;
+    // const int32_t q = (int64_t) hi8 * e40d10000 >> 40;
+    // const int32_t lo2 = val%100;
+    // short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    // const int64_t a = ((int64_t) hi8 << 32 | q) - q * e32m10000;
+    // const int64_t b = a * e19d100 & 0x3f8000003f80000ll;
+    // const int64_t c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
+    // const ll hi8d = (c<<9 | d>>9) - d*5;
+    // const int shifts = 56 & __builtin_ctzll(c<<9 | d>>9);
+    // const ll lo8a = (hi8d>>2 | ascii0s) >> shifts;
+    // memcpy(buffer, &lo8a, 8);
+    // memcpy(buffer+8-(shifts>>3), &lo2a, 2);
+
+    int64_t lo8a = '0'; 
+    memset(buffer+7, 0, 4);
+    if (val >= 100000000) {
+        const uint32_t hi8 = val/100;
+        char * const buf = val >= 1000000000 ? buffer : buffer-1;
+        const int32_t q = (int64_t) hi8 * e40d10000 >> 40;
+        const int32_t lo2 = val%100;
+        memcpy(buf+8, gDigitsLut+lo2*2, 2);
+        const int64_t a = -e32m10000*q + ((int64_t) hi8 << 32 | q);
+        const int64_t b = a * e19d100 & 0x3f8000003f80000ll;
+        const int64_t b25 = b*25, c = (a<<17) - b25;
+        memcpy(buffer, (char *) dLut + ((int32_t)b>>18), 2);
+        memcpy(buf+2, gDigitsLut + ((int32_t)c>>16), 2);
+        memcpy(buf+4, gDigitsLut + (b>>50), 2);
+        memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    } else {
+        if (val) {
+            const int32_t q = (int64_t) val * e40d10000 >> 40;
+            const int64_t a = ((int64_t) val << 32 | q) - q * e32m10000;
+            const int64_t b = a * e19d100 & 0x3f8000003f80000ll;
+            const int64_t c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
+            const ll decimals = (c<<9 | d>>9) - d*5;
+            const int shifts = 56 & __builtin_ctzll(c<<9 | d>>9);
+            lo8a = (decimals>>2 | ascii0s) >> shifts;
+        }
+        memcpy(buffer, &lo8a, 8);
+    }
 }
 
 
@@ -1219,34 +1270,18 @@ inline void i32toa_hintro(int32_t value, char* buffer) {
 }
 
 void u64toa_hintro(uint64_t value, char* buffer) {
-    // lo8a = 0x30;  // ASCII 0
-    // memset(buffer+7, 0, 4);
-    // if (val >= 100000000) {
-    //     const int32_t hi2 = val/100000000;
-    //     memcpy(buffer, dLut+hi2, 2);
-    //     const int32_t lo8 = val%100000000;
-    //     buffer += val>=1000000000 ? 2 : 1;
-    //     itoa8lut(lo8, buffer);
-    // } else {
-    //     if (val) {
-    //         const int64_t decimals = itoa8lil(val);
-    //         lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(decimals));
-    //     }
-    //     memcpy(buffer, &lo8a, 8);
-    // }
+    char temp[20];
+    char *p = temp;
+    do {
+        *p++ = char(value % 10) + '0';
+        value /= 10;
+    } while (value > 0);
 
-    // char temp[10];
-    // char *p = temp;
-    // do {
-    //     *p++ = char(value % 10) + '0';
-    //     value /= 10;
-    // } while (value > 0);
+    do {
+        *buffer++ = *--p;
+    } while (p != temp);
 
-    // do {
-    //     *buffer++ = *--p;
-    // } while (p != temp);
-
-    // *buffer = '\0';
+    *buffer = '\0';
 }
 
 void i64toa_hintro(int64_t value, char* buffer) {
