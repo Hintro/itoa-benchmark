@@ -1027,6 +1027,32 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     // }
     // else memcpy(buffer, &lo8a, 4);
 
+    // ll lo8a = '0';
+    // memset(buffer+7, 0, 4);
+    // if (val > 99999999) {
+    //     const uint32_t hi8 = val/100;
+    //     char * const buf = val >= 1000000000 ? buffer : buffer-1;
+    //     const int32_t q = (ll) hi8 * e40d10000 >> 40;
+    //     const int32_t lo2 = val%100;
+    //     memcpy(buf+8, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, (char *) dLut + ((int32_t)b>>18), 2);
+    //     memcpy(buf+2, gDigitsLut + ((int32_t)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val) {
+    //     const int32_t q = (ll) val * e40d10000 >> 40;
+    //     const ll a = ((ll) val << 32 | q) - q * e32m10000;
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
+    //     const ll decimals = (c<<9 | d>>9) - d*5;
+    //     lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(c<<9 | d>>9));
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else memcpy(buffer, &lo8a, 4);
+
     ll lo8a = '0';
     memset(buffer+7, 0, 4);
     if (val > 99999999) {
@@ -1034,8 +1060,9 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
         char * const buf = val >= 1000000000 ? buffer : buffer-1;
         const int32_t q = (ll) hi8 * e40d10000 >> 40;
         const int32_t lo2 = val%100;
-        memcpy(buf+8, gDigitsLut+lo2*2, 2);
+        i32 lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
         const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+        memcpy(buf+8, &lo2a, 2);
         const ll b = a * e19d100 & 0x3f8000003f80000ll;
         const ll b25 = b*25, c = (a<<17) - b25;
         memcpy(buffer, (char *) dLut + ((int32_t)b>>18), 2);
