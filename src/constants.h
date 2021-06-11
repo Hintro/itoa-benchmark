@@ -3,6 +3,7 @@
 using ll = long long;
 using ull = unsigned long long;
 using i32 = int32_t;
+using u32 = uint32_t;
 
 const int32_t e40d10000 = (1ull << 40) / 10000 + 1, e19d100 = (1<<19) / 100 + 1, e10d10 = 103, e9d10 = 52;
 const ll e32m10000 = (1ull << 32) * 10000, ascii0s = 0x3030303030303030ll, e57d8 = 1441151881;

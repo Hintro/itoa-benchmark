@@ -30,7 +30,7 @@ limitations under the License.
 //     return (c | d>>2) - (d*5>>9);
 // }
 
-inline ull itoa8lil(const uint32_t val) {
+inline ull itoa8lil(const u32 val) {
     // const ull q = val * e40d10000 >> 40, a = ((ull) val << 32 | q) - q * e32m10000;
     // const ull mask1 = 0x3f8000003f80000ull, mask2 = 0x7800780078007800ull;
     // const ull b = a * e19d100 & mask1;
@@ -56,7 +56,7 @@ inline ull itoa8lil(const uint32_t val) {
     // return (c<<9 | d>>9) - d*5;
 }
 
-inline ull itoa8lil2(const uint32_t val) {
+inline ull itoa8lil2(const u32 val) {
     // const ull q = val * e40d10000 >> 40, a = ((ull) val << 32 | q) - q * e32m10000;
     // const ull mask1 = 0x3f8000003f80000ull, mask2 = 0x7800780078007800ull;
     // const ull b = a * e19d100 & mask1;
@@ -83,7 +83,7 @@ inline ull itoa8lil2(const uint32_t val) {
 }
 
 
-inline void itoa8lut(const uint32_t val, char * buf) {
+inline void itoa8lut(const u32 val, char * buf) {
     // const int32_t q = (ll) val * e40d10000 >> 40;
     // const ll a = ((ll) val << 32 | q) - q * e32m10000;
     // const ll b = a * e19d100 & 0x3f8000003f80000ll;
@@ -157,7 +157,7 @@ inline void itoa8lut(const uint32_t val, char * buf) {
 }
 
 
-inline ll itoa8lut2(const uint32_t val) {
+inline ll itoa8lut2(const u32 val) {
     const int32_t q = (ll) val * e40d10000 >> 40;
     const ll a = ((ll) val << 32 | q) - q * e32m10000;
     const ll b = a * e19d100 & 0x3f8000003f80000ll;
@@ -182,7 +182,7 @@ inline ll itoa8lut2(const uint32_t val) {
 }
 
 
-inline ll itoa8blut(const uint32_t val) {
+inline ll itoa8blut(const u32 val) {
     const int32_t q = (ll) val * e40d10000 >> 40;
     const ll a = -e32m10000*q + ((ll) val << 32 | q);
     const ll b = a * e19d100 & 0x3f8000003f80000ll;
@@ -207,7 +207,7 @@ inline ll itoa8blut(const uint32_t val) {
 }
 
 
-static uint32_t E = 0;
+static u32 E = 0;
 // static uint16_t last = '0';
 // static char * lastPointer;
 // static uint_fast64_t last_a = (char)ascii0s;
@@ -219,7 +219,7 @@ static ull step = 1, limit = 0x3a;
 static int shifts = 56;
 
 
-inline ll itoa8lil(const uint32_t val, const ll& ne32m10000) {
+inline ll itoa8lil(const u32 val, const ll& ne32m10000) {
     const int32_t q = (ll) val * e40d10000 >> 40;
     const ll a = ((ll) val << 32 | q) + q * ne32m10000;
     const ll b = a * e19d100 & 0x3f8000003f80000ll;
@@ -227,7 +227,7 @@ inline ll itoa8lil(const uint32_t val, const ll& ne32m10000) {
     return (c<<9 | d>>9) - d*5;
 }
 
-inline void itoa8lut2(const uint32_t val, char * buf, const ll& ne32m10000) {
+inline void itoa8lut2(const u32 val, char * buf, const ll& ne32m10000) {
     const int32_t q = (ll) val * e40d10000 >> 40;
     const ll a = ne32m10000*q + ((ll) val << 32 | q);
     const ll b = a * e19d100 & 0x3f8000003f80000ll;
@@ -239,11 +239,11 @@ inline void itoa8lut2(const uint32_t val, char * buf, const ll& ne32m10000) {
 }
 
 
-inline void u32toa_hintro(const uint32_t val, char* buffer) {
+inline void u32toa_hintro(const u32 val, char* buffer) {
     // ull lo8a;
-    // uint32_t hi2a, hi2aSize = 2;
+    // u32 hi2a, hi2aSize = 2;
     // if (val >= 100000000) {
-    //     const uint32_t hi2 = val * e57d8 >> 57, lo8 = val - hi2 * 100000000;
+    //     const u32 hi2 = val * e57d8 >> 57, lo8 = val - hi2 * 100000000;
     //     lo8a = itoa8lil(lo8) >> 2 | ascii0s;
     //     const uint_fast8_t hi1d = hi2*e9d10 >> 9, shift = hi1d ? 0 : 8;
     //     // hi2aSize -= hi1d ? 0 : 1;
@@ -261,9 +261,9 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
 
 
     // ull lo8a;
-    // uint32_t hi2a, hi2aSize = 2;
+    // u32 hi2a, hi2aSize = 2;
     // if (val >= 100000000) {
-    //     const uint32_t hi2 = val * e57d8 >> 57, lo8 = val - hi2 * 100000000;
+    //     const u32 hi2 = val * e57d8 >> 57, lo8 = val - hi2 * 100000000;
     //     lo8a = itoa8lil(lo8) >> 2 | ascii0s;
     //     const uint_fast8_t hi1d = hi2*e9d10 >> 9, shift = hi1d ? 0 : 8;
     //     hi2aSize -= hi1d ? 0 : 1;
@@ -281,9 +281,9 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
 
 
     // ull lo8a;
-    // uint32_t hi2a;
+    // u32 hi2a;
     // if (val >= 100000000) {
-    //     const uint32_t hi2 = val * e57d8 >> 57, lo8 = val - hi2 * 100000000;
+    //     const u32 hi2 = val * e57d8 >> 57, lo8 = val - hi2 * 100000000;
     //     lo8a = itoa8lil(lo8) >> 2 | ascii0s;
     //     const uint_fast8_t hi1d = hi2*e9d10 >> 9, shift = hi1d ? 0 : 8;
     //     // hi2aSize -= hi1d ? 0 : 1;
@@ -300,11 +300,11 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     // buffer[8] = '\0';
 
     // ull lo8a;
-    // uint32_t hi2a, hi2aSize = 2;
+    // u32 hi2a, hi2aSize = 2;
     // if (val >= 100000000) {
-    //     const uint32_t hi2 = val * e57d8 >> 57, lo8 = val - hi2 * 100000000;
+    //     const u32 hi2 = val * e57d8 >> 57, lo8 = val - hi2 * 100000000;
     //     lo8a = itoa8lil(lo8) >> 2 | ascii0s;
-    //     const uint32_t hi1d = hi2*e9d10 >> 9, shift = hi1d ? 0 : 8;
+    //     const u32 hi1d = hi2*e9d10 >> 9, shift = hi1d ? 0 : 8;
     //     hi2aSize -= !hi1d;
     //     hi2a = (((hi2 << 8) + (uint_fast16_t) ascii0s | hi1d)>>shift) - (hi2*e9d10 & 0xe00) * 5;
     //     memcpy(buffer, &hi2a, sizeof hi2a);
@@ -319,12 +319,12 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     // ll lo8a;
     // int32_t hi2a, hi2aSize = 2;
     // if (val >= 100000000) {
-    //     const uint32_t hi2 = val * e57d8 >> 57;
+    //     const u32 hi2 = val * e57d8 >> 57;
     //     const int32_t lo8 = val - hi2 * 100000000;
     //     lo8a = itoa8lil(lo8) >> 2 | ascii0s;
     //     const int32_t hi1d = hi2*e9d10 >> 9, shift = hi1d ? 0 : 8;
     //     hi2aSize -= !hi1d;
-    //     hi2a = (((hi2 << 8) + (uint32_t) ascii0s | hi1d)>>shift) - (hi2*e9d10 & 0xe00) * 5;
+    //     hi2a = (((hi2 << 8) + (u32) ascii0s | hi1d)>>shift) - (hi2*e9d10 & 0xe00) * 5;
     //     memcpy(buffer, &hi2a, sizeof hi2a);
     // } else {
     //     const ll decimals = itoa8lil(val), tmp = (decimals >> 2 | ascii0s) >> (56 & __builtin_ctzll(decimals));
@@ -337,7 +337,7 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     // ll lo8a;
     // int32_t hi2aSize = 2;
     // if (val >= 100000000) {
-    //     const uint32_t hi2 = val * e57d8 >> 57;
+    //     const u32 hi2 = val * e57d8 >> 57;
     //     const int32_t lo8 = val - hi2 * 100000000;
     //     lo8a = itoa8lil(lo8) >> 2 | ascii0s;
     //     memcpy(buffer, dLut+hi2, 2);
@@ -353,7 +353,7 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
 
     // ll lo8a;
     // if (val >= 100000000) {
-    //     const uint32_t hi2 = val * e57d8 >> 57;
+    //     const u32 hi2 = val * e57d8 >> 57;
     //     memcpy(buffer, dLut+hi2, 2);
     //     buffer = hi2>=10 ? buffer+2 : buffer+1;
     //     const int32_t lo8 = val - hi2 * 100000000;
@@ -368,7 +368,7 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
 
     // ll lo8a = (int_fast8_t) ascii0s;
     // if (val >= 100000000) {
-    //     const uint32_t hi2 = val * e57d8 >> 57;
+    //     const u32 hi2 = val * e57d8 >> 57;
     //     memcpy(buffer, dLut+hi2, 2);
     //     buffer = hi2>=10 ? buffer+2 : buffer+1;
     //     const int32_t lo8 = val - hi2 * 100000000;
@@ -768,7 +768,7 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     // lo8a = 0x30;  // ASCII 0
     // memset(buffer+7, 0, 4);
     // if (val >= 100000000) {
-    //     const uint32_t hi8 = val/100;
+    //     const u32 hi8 = val/100;
     //     char * const buf = val >= 1000000000 ? buffer : buffer-1;
     //     const int32_t q = (ll) hi8 * e40d10000 >> 40;
     //     const int32_t lo2 = val%100;
@@ -796,7 +796,7 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     // ll lo8a = 0x30;  // ASCII 0
     // memset(buffer+7, 0, 4);
     // if (val >= 100000000) {
-    //     const uint32_t hi8 = val/100;
+    //     const u32 hi8 = val/100;
     //     char * const buf = val >= 1000000000 ? buffer : buffer-1;
     //     const int32_t q = (ll) hi8 * e40d10000 >> 40;
     //     const int32_t lo2 = val%100;
@@ -822,7 +822,7 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     // ll lo8a = '0'; 
     // memset(buffer+7, 0, 4);
     // if (val >= 100000000) {
-    //     const uint32_t hi8 = val/100;
+    //     const u32 hi8 = val/100;
     //     char * const buf = val >= 1000000000 ? buffer : buffer-1;
     //     const int32_t q = (ll) hi8 * e40d10000 >> 40;
     //     const int32_t lo2 = val%100;
@@ -919,7 +919,7 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     // ll lo8a = '0'; 
     // memset(buffer+7, 0, 4);
     // if (val >= 100000000) {
-    //     const uint32_t hi8 = val/100;
+    //     const u32 hi8 = val/100;
     //     char * const buf = val >= 1000000000 ? buffer : buffer-1;
     //     const int32_t q = (ll) hi8 * e40d10000 >> 40;
     //     const int32_t lo2 = val%100;
@@ -947,7 +947,7 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     // ll lo8a = '0'; 
     // memset(buffer+7, 0, 4);
     // if (val >= 100000000) {
-    //     const uint32_t hi8 = val/100;
+    //     const u32 hi8 = val/100;
     //     char * const buf = val >= 1000000000 ? buffer : buffer-1;
     //     const int32_t q = (ll) hi8 * e40d10000 >> 40;
     //     const int32_t lo2 = val%100;
@@ -976,7 +976,7 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     // ll lo8a = '0';
     // memset(buffer+7, 0, 4);
     // if (val > 99999999) {
-    //     const uint32_t hi8 = val/100;
+    //     const u32 hi8 = val/100;
     //     char * const buf = val >= 1000000000 ? buffer : buffer-1;
     //     const int32_t q = (ll) hi8 * e40d10000 >> 40;
     //     const int32_t lo2 = val%100;
@@ -1004,7 +1004,7 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     // ll lo8a = '0';
     // memset(buffer+7, 0, 4);
     // if (val > 99999999) {
-    //     const uint32_t hi8 = val/100;
+    //     const u32 hi8 = val/100;
     //     char * const buf = val >= 1000000000 ? buffer : buffer-1;
     //     const int32_t q = (ll) hi8 * e40d10000 >> 40;
     //     const int32_t lo2 = val%100;
@@ -1030,7 +1030,7 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     // ll lo8a = '0';
     // memset(buffer+7, 0, 4);
     // if (val > 99999999) {
-    //     const uint32_t hi8 = val/100;
+    //     const u32 hi8 = val/100;
     //     char * const buf = val >= 1000000000 ? buffer : buffer-1;
     //     const int32_t q = (ll) hi8 * e40d10000 >> 40;
     //     const int32_t lo2 = val%100;
@@ -1056,11 +1056,11 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
     ll lo8a = '0';
     memset(buffer+7, 0, 4);
     if (val > 99999999) {
-        const uint32_t hi8 = val/100;
+        const u32 hi8 = val/100;
         char * const buf = val >= 1000000000 ? buffer : buffer-1;
         const int32_t q = (ll) hi8 * e40d10000 >> 40;
         const int32_t lo2 = val%100;
-        i32 lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+        short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
         const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
         memcpy(buf+8, &lo2a, 2);
         const ll b = a * e19d100 & 0x3f8000003f80000ll;
@@ -1084,14 +1084,14 @@ inline void u32toa_hintro(const uint32_t val, char* buffer) {
 
 
 inline void i32toa_hintro(int32_t value, char* buffer) {
-    // uint32_t u = static_cast<uint32_t>(value);
+    // u32 u = static_cast<u32>(value);
     // if (value < 0) {
     //     *buffer++ = '-';
     //     u = ~u + 1;
     // }
     // u32toa_naive(u, buffer);
 
-    // uint32_t u = static_cast<uint32_t>(value);
+    // u32 u = static_cast<u32>(value);
     // if (value < 0) {
     //     *buffer = '-';
     //     u = ~u + 1;
@@ -1099,14 +1099,14 @@ inline void i32toa_hintro(int32_t value, char* buffer) {
     // u32toa_naive(u, buffer+(value<0));
 
     // const uint_fast64_t val = value < 0 ? ~value + 1 : value;
-    // const uint32_t negMask = value < 0 ? -1 : 0, negShift = 8 & negMask, negSign = '-' & negMask;
+    // const u32 negMask = value < 0 ? -1 : 0, negShift = 8 & negMask, negSign = '-' & negMask;
     // ull lo8a;
-    // uint32_t hi2a = 0, hi2aSize = 2 - negMask;
+    // u32 hi2a = 0, hi2aSize = 2 - negMask;
     // const ull ascii0s = 0x3030303030303030ull;
     // if (val >= 100000000) {
-    //     const uint32_t e9d10 = 52, hi2 = val * e57d8 >> 57, lo8 = val - hi2 * 100000000;
+    //     const u32 e9d10 = 52, hi2 = val * e57d8 >> 57, lo8 = val - hi2 * 100000000;
     //     lo8a = itoa8lil(lo8) >> 2 | ascii0s;
-    //     const uint32_t hi1d = hi2*e9d10 >> 9, adjustSize = hi1d ? 0 : 1, shift = hi1d ? 0 : 8;
+    //     const u32 hi1d = hi2*e9d10 >> 9, adjustSize = hi1d ? 0 : 1, shift = hi1d ? 0 : 8;
     //     hi2a = (((hi2 << 8) + (uint16_t) ascii0s | hi1d)>>shift) - (hi2*e9d10 & 0xe00) * 5;
     //     hi2aSize -= adjustSize;
     // } else {
@@ -1349,7 +1349,7 @@ inline void i32toa_hintro(int32_t value, char* buffer) {
     // const ll tmp = '-';
     // memcpy(buffer, &tmp, 8);
     // memset(buffer+8, 0, 4);
-    // uint32_t val = (uint32_t&) value;
+    // u32 val = (u32&) value;
     // if (value<0) {
     //     val = -val;
     //     ++buffer;
@@ -1381,7 +1381,7 @@ inline void i32toa_hintro(int32_t value, char* buffer) {
     const ll tmp = '-';
     memcpy(buffer, &tmp, 8);
     memset(buffer+8, 0, 4);
-    uint32_t val = (uint32_t&) value;
+    u32 val = (u32&) value;
     if (value<0) {
         val = -val;
         ++buffer;
