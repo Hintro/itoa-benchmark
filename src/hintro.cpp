@@ -1281,9 +1281,7 @@ inline void u32toa_hintro(const u32 val, char* buffer) {
     // else memcpy(buffer, &lo8a, 4);
 
     
-    ll lo8a = '0';
-    // memset(buffer+7, 0, 4);
-    ll ne32m10000;
+    ll lo8a = '0', ne32m10000;
     DoNotOptimize(ne32m10000 = -e32m10000);
     memset(buffer+7, 0, 4);
     if (val > 99999999) {
