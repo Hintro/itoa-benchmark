@@ -1280,32 +1280,307 @@ inline void u32toa_hintro(const u32 val, char* buffer) {
     // }
     // else memcpy(buffer, &lo8a, 4);
 
-    
-    ll lo8a = '0', ne32m10000;
-    DoNotOptimize(ne32m10000 = -e32m10000);
+    // Trying DoNotOptimize    
+    // ll lo8a = '0', ne32m10000;
+    // DoNotOptimize(ne32m10000 = -e32m10000);
+    // memset(buffer+7, 0, 4);
+    // if (val > 99999999) {
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val > 999999999 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = ne32m10000*q + ((ll)hi8 <<32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, (char *)dLut + ((i32)b>>18), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val) {
+    //     const i32 q = (ll) val * e40d10000 >> 40;
+    //     const ll a = q * ne32m10000 + ((ll) val << 32 | q);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
+    //     const ll decimals = (c<<9 | d>>9) - d*5;
+    //     lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(c<<9 | d>>9));
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else memcpy(buffer, &lo8a, 4);
+
+    // Hybrid arith + Lut
+    // ll lo8a = '0', ne32m10000;
+    // DoNotOptimize(ne32m10000 = -e32m10000);
+    // // ne32m10000 = -e32m10000;
+    // memset(buffer+7, 0, 4);
+    // if (val > 99999999) {
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val > 999999999 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = ne32m10000*q + ((ll)hi8 <<32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, dLut + ((i32)a*e19d100>>19), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val) {
+    //     const i32 q = (ll) val * e40d10000 >> 40;
+    //     const ll a = q * ne32m10000 + ((ll) val << 32 | q);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
+    //     const ll decimals = (c<<9 | d>>9) - d*5;
+    //     lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(c<<9 | d>>9));
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else memcpy(buffer, &lo8a, 4);
+
+    // ll lo8a = '0';
+    // memset(buffer+7, 0, 4);
+    // if (val > 99999999) {
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val >= 1000000000 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     // memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     memcpy(buffer, dLut + ((i32)a*e19d100>>19), 2);
+    //     memcpy(buf+4, gDigitsLut + (a*e19d100>>51)*2, 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+        
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val) {
+    //     const i32 q = (ll) val * e40d10000 >> 40;
+    //     const ll a = ((ll) val << 32 | q) - q * e32m10000;
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
+    //     const ll decimals = (c<<9 | d>>9) - d*5;
+    //     lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(c<<9 | d>>9));
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else memcpy(buffer, &lo8a, 4);
+
+    // Try skipping &
+    // ll lo8a = '0';
+    // memset(buffer+7, 0, 4);
+    // if (val > 99999999) {
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val >= 1000000000 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     // memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     memcpy(buffer, dLut + DoNotOptimize((i32)a*e19d100>>19), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     // memcpy(buf+4, gDigitsLut + DoNotOptimize(a*e19d100>>51)*2, 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val) {
+    //     const i32 q = (ll) val * e40d10000 >> 40;
+    //     const ll a = ((ll) val << 32 | q) - q * e32m10000;
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
+    //     const ll decimals = (c<<9 | d>>9) - d*5;
+    //     lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(c<<9 | d>>9));
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else memcpy(buffer, &lo8a, 4);
+
+    // Less Lookup
+    // ll lo8a = '0';
+    // memset(buffer+7, 0, 4);
+    // if (val > 99999999) {
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val > 999999999 ? buffer : buffer-1;
+    //     const auto shifts = val > 999999999 ? 11 : 19;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     const ll d = a * e23d1e3 & 0x780000007800000ll;
+    //     const ll digits04 = (d>>12) - (d>>3)*5 + b >> shifts | ascii0s;
+    //     memcpy(buffer, &digits04, 8);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val) {
+    //     const i32 q = (ll) val * e40d10000 >> 40;
+    //     const ll a = ((ll) val << 32 | q) - q * e32m10000;
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
+    //     const ll decimals = (c<<9 | d>>9) - d*5;
+    //     lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(c<<9 | d>>9));
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else memcpy(buffer, &lo8a, 4);
+
+    // Reordering lookups
+    // ll lo8a = '0';
+    // memset(buffer+7, 0, 4);
+    // if (val > 99999999) {
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val >= 999999999 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short tmp2d; memcpy(&tmp2d, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &tmp2d, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25;
+    //     memcpy(&tmp2d, (char *) dLut + ((i32)b>>18), 2);
+    //     const ll c = (a<<17) - b25;
+    //     // memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     short tmp2d2; memcpy(&tmp2d2, gDigitsLut + (b>>50), 2);
+    //     memcpy(buffer, &tmp2d, 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     // memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+4, &tmp2d2, 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val) {
+    //     const i32 q = (ll) val * e40d10000 >> 40;
+    //     const ll a = ((ll) val << 32 | q) - q * e32m10000;
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
+    //     const ll decimals = (c<<9 | d>>9) - d*5;
+    //     lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(c<<9 | d>>9));
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else memcpy(buffer, &lo8a, 4);
+
+    // FAST on Jun 12
+    // ll lo8a = '0';
+    // memset(buffer+7, 0, 4);
+    // if (val > 99999999) {
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val >= 999999999 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val) {
+    //     const i32 q = (ll) val * e40d10000 >> 40;
+    //     const ll a = ((ll) val << 32 | q) - q * e32m10000;
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
+    //     const ll decimals = (c<<9 | d>>9) - d*5;
+    //     lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(c<<9 | d>>9));
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else memcpy(buffer, &lo8a, 4);
+
+    // ll lo8a = '0';
+    // char * buf = DoNotOptimize(buffer);
+    // memset(buffer+7, 0, 4);
+    // if (val > 99999999) {
+    //     const u32 hi8 = val/100;
+    //     if (val <= 999999999) --buf;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val) {
+    //     const i32 q = (ll) val * e40d10000 >> 40;
+    //     const ll a = ((ll) val << 32 | q) - q * e32m10000;
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
+    //     const ll decimals = (c<<9 | d>>9) - d*5;
+    //     lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(c<<9 | d>>9));
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else memcpy(buffer, &lo8a, 4);
+
+    // ll lo8a = '0';
+    // char * buf;
+    // DoNotOptimize(buf = buffer);
+    // memset(buffer+7, 0, 4);
+    // if (val > 99999999) {
+    //     const u32 hi8 = DoNotOptimize(val/100);
+    //     if (val <= 999999999) --buf;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val) {
+    //     const i32 q = (ll) val * e40d10000 >> 40;
+    //     const ll a = ((ll) val << 32 | q) - q * e32m10000;
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
+    //     const ll decimals = (c<<9 | d>>9) - d*5;
+    //     lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(c<<9 | d>>9));
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else memcpy(buffer, &lo8a, 4);
+
+
+    // Learned from jeaiii's code
+    ll lo8a = '0', tmp;
     memset(buffer+7, 0, 4);
-    if (val > 99999999) {
+    if (val > 999999) {
         const u32 hi8 = val/100;
-        char * const buf = val > 999999999 ? buffer : buffer-1;
+        char * const buf = val >= 999999999 ? buffer : buffer-1;
         const i32 q = (ll) hi8 * e40d10000 >> 40;
         const i32 lo2 = val%100;
         short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
-        const ll a = ne32m10000*q + ((ll)hi8 <<32 | q);
+        const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
         memcpy(buf+8, &lo2a, 2);
         const ll b = a * e19d100 & 0x3f8000003f80000ll;
         const ll b25 = b*25, c = (a<<17) - b25;
-        memcpy(buffer, (char *)dLut + ((i32)b>>18), 2);
+        memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
         memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
         memcpy(buf+4, gDigitsLut + (b>>50), 2);
         memcpy(buf+6, gDigitsLut + (c>>48), 2);
     } else if (val) {
-        const i32 q = (ll) val * e40d10000 >> 40;
-        const ll a = ((ll) val << 32 | q) + q * ne32m10000;
-        const ll b = a * e19d100 & 0x3f8000003f80000ll;
-        const ll c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
-        const ll decimals = (c<<9 | d>>9) - d*5;
-        lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(c<<9 | d>>9));
-        memcpy(buffer, &lo8a, 8);
+        // const i32 q = (ll) val * e40d10000 >> 40;
+        // const ll a = ((ll) val << 32 | q) - q * e32m10000;
+        // const ll b = a * e19d100 & 0x3f8000003f80000ll;
+        // const ll c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
+        // const ll decimals = (c<<9 | d>>9) - d*5;
+        // lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(c<<9 | d>>9));
+        // memcpy(buffer, &lo8a, 8);
+        ll fraction = val * e32d1e4;
+        memcpy(&lo8a, gDigitsLut + (fraction>>32)*2, 2);
+        fraction = (u32) fraction * 100ll;
+        memcpy(&tmp, gDigitsLut + (fraction>>32)*2, 2);
+        fraction = (u32) fraction * 100ll;
+        lo8a |= tmp << 16;
+        memcpy(&tmp, gDigitsLut + (fraction>>32)*2, 2);
+        lo8a |= tmp << 32;
+        
     }
     else memcpy(buffer, &lo8a, 4);
 }

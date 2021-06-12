@@ -5,13 +5,21 @@ using ull = unsigned long long;
 using i32 = int32_t;
 using u32 = uint32_t;
 
+// template <class T>
+// __attribute__((always_inline)) inline void DoNotOptimize(const T &value) {
+//   asm volatile("" : "+r"(const_cast<T &>(value)));
+// }
+
 template <class T>
-__attribute__((always_inline)) inline void DoNotOptimize(const T &value) {
-  asm volatile("" : "+r"(const_cast<T &>(value)));
+__attribute__((always_inline)) inline T& DoNotOptimize(const T &value) {
+    asm volatile("" : "+r"(const_cast<T&>(value)));
+    return const_cast<T&>(value);
 }
 
-const int32_t e40d10000 = (1ull << 40) / 10000 + 1, e19d100 = (1<<19) / 100 + 1, e10d10 = 103, e9d10 = 52;
-const ll e32m10000 = (1ull << 32) * 10000, ascii0s = 0x3030303030303030ll, e57d8 = 1441151881;
+const i32 e19d100 = (1<<19) /100 + 1, e10d10 = 103, e23d1e3 = (1<<23) /1000 + 1;
+const ll e40d10000 = (1ll << 40) /10000 + 1, e32m10000 = (1ll << 32) * 10000, 
+ascii0s = 0x3030303030303030ll, e32d1e4 = (1ll<<32) /10000 + 1;
+// e57d8 = 1441151881, e9d10 = 52,
 
 // const uint16_t dLut[] = {
 //        0,  '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',
@@ -70,15 +78,15 @@ const char decLut[] = {
 // const char * const DPsLut = Luts + 86;
 
 
-const int32_t powers[14] = {
+const i32 powers[14] = {
     10000000, 10000000, 10000000, 1000000, 1000000, 100000, 10000, 10000, 1000, 1000, 100, 10, 10, 0
 };
 
-uint32_t const * const powersLut = (uint32_t *) powers - 2;
+u32 const * const powersLut = (u32 *) powers - 2;
 
 const ull shiftLut = 0x7665443321100000ull;
 
 // For sequential optimization
 const ull _198 = 0xc6c6c6c6c6c6c6c6ull, _208 = 0xd0d0d0d0d0d0d0d0ull, 
 b10100000 = 0xa0a0a0a0a0a0a0a0ull, lo4bit = 0x0f0f0f0f0f0f0f0full, _192 = 0xc0c0c0c0c0c0c0c0ll;
-const uint8_t init_mask = 0xff;
+const int init_mask = 0xff;
