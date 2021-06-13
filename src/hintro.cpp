@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <stdint.h>
-#include "test.h"
 #include <iostream>
+#include <stdio.h>
+#include "test.h"
 #include "constants.h"
 #include "digitslut.h"
 
@@ -1548,7 +1548,8 @@ inline void u32toa_hintro(const u32 val, char* buffer) {
 
 
     // Learned from jeaiii's code
-    ll lo8a = '0', tmp;
+    // Using ctz to determine the shift
+    ll lo8a = '0', tmp = 0;
     memset(buffer+7, 0, 4);
     if (val > 999999) {
         const u32 hi8 = val/100;
@@ -1564,25 +1565,26 @@ inline void u32toa_hintro(const u32 val, char* buffer) {
         memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
         memcpy(buf+4, gDigitsLut + (b>>50), 2);
         memcpy(buf+6, gDigitsLut + (c>>48), 2);
-    } else if (val) {
-        // const i32 q = (ll) val * e40d10000 >> 40;
-        // const ll a = ((ll) val << 32 | q) - q * e32m10000;
-        // const ll b = a * e19d100 & 0x3f8000003f80000ll;
-        // const ll c = (a<<17 | b>>18) - b*25, d = c * e10d10 & 0x7800780078007800ll;
-        // const ll decimals = (c<<9 | d>>9) - d*5;
-        // lo8a = (decimals>>2 | ascii0s) >> (56 & __builtin_ctzll(c<<9 | d>>9));
-        // memcpy(buffer, &lo8a, 8);
+    } else if (val > 9) {
         ll fraction = val * e32d1e4;
-        memcpy(&lo8a, gDigitsLut + (fraction>>32)*2, 2);
+        // int shift = val < 10 ? 8 : 0;
+        memcpy(&lo8a, decLut + (fraction>>32)*2, 2);
         fraction = (u32) fraction * 100ll;
-        memcpy(&tmp, gDigitsLut + (fraction>>32)*2, 2);
+        memcpy(&tmp, decLut + (fraction>>32)*2, 2);
         fraction = (u32) fraction * 100ll;
         lo8a |= tmp << 16;
-        memcpy(&tmp, gDigitsLut + (fraction>>32)*2, 2);
+        int off = __builtin_ctzll(lo8a | 0x100000000ll);
+        memcpy(&tmp, decLut + (fraction>>32)*2, 2);
+        lo8a |= ascii0s<<16 >>16;
         lo8a |= tmp << 32;
-        
+        // lo8a >>= shift +off & 56;
+        lo8a >>= off & 56;
+        memcpy(buffer, &lo8a, 8);
     }
-    else memcpy(buffer, &lo8a, 4);
+    else {
+        lo8a |= val;
+        memcpy(buffer, &lo8a, 4);
+    }
 }
 
 
