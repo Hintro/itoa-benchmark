@@ -116,4 +116,4 @@ const u8 encoded9s[] = {
 
 const u8 * const pLut2_6 = encoded9s - 12;
 
-const ull guess2_6 = 0x1196AFF000ll;
+const ull guess2_6 = 0x1196AFF000000ll;
