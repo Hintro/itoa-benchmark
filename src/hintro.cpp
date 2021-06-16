@@ -1856,9 +1856,10 @@ inline void u32toa_hintro(const u32 val, char* buffer) {
         fraction = (u32) fraction * 100ll;
         memcpy(&hi4, gDigitsLut + (ab)*2, 2);
         int off = guess2_6 >> (clz<<1) & 3;
-        off += val > p10;
+        // off += val > p10;
         memcpy(&tmp, gDigitsLut + (fraction>>32)*2, 2);
         fraction = (u32) fraction * 25ll;
+        off += val > p10;
         hi4 |= tmp << 16;
         int shift = off*8;
         memcpy(&tmp, gDigitsLut + (fraction>>30)*2, 2);
