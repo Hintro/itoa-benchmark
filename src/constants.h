@@ -1,9 +1,11 @@
 #include <stdint.h>
+#include <limits.h>
 
 using ll = long long;
 using ull = unsigned long long;
 using i32 = int32_t;
 using u32 = uint32_t;
+using u8 = uint8_t;
 
 // template <class T>
 // __attribute__((always_inline)) inline void DoNotOptimize(const T &value) {
@@ -104,3 +106,14 @@ const ull shiftLut = 0x7665443321100000ull;
 const ull _198 = 0xc6c6c6c6c6c6c6c6ull, _208 = 0xd0d0d0d0d0d0d0d0ull, 
 b10100000 = 0xa0a0a0a0a0a0a0a0ull, lo4bit = 0x0f0f0f0f0f0f0f0full, _192 = 0xc0c0c0c0c0c0c0c0ll;
 const int init_mask = 0xff;
+
+
+const u8 encoded9s[] = {
+    // 0xa0, 0x86, 0, 0x10, 0x27, 0, 0, 0xe8, 3, 0, 0x64
+    // 0,0,0, 0xa0, 0x86, 0, 0x10, 0x27, 0, 0, 0xe8, 3, 0, 0x64, 0,0,0
+    0,0,0, 0x9f, 0x86, 0, 0xf, 0x27, 0, 0, 0xe7, 3, 0, 99, 0,99,99
+};
+
+const u8 * const pLut2_6 = encoded9s - 12;
+
+const ull guess2_6 = 0x1196AFF000ll;
