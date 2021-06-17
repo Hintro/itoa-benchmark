@@ -2348,10 +2348,357 @@ inline void u32toa_hintro(u32 val, char* buffer) {
     // }
 
     // 3.06
+    // ll lo8a = 0, tmp = 0;
+    // u32 hi4 = 0;
+    // // memset(buffer+7, 0, 4);
+    // if (val > 999999) {
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val >= 999999999 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val > 9) {
+    //     ll fraction = val * e32d1e4;
+    //     int clz = __builtin_clz(val);
+    //     val &= ~(1<<16);
+    //     u16 p10; memcpy(&p10, pLut2_6+clz, 2);
+    //     int off = val > p10;
+    //     const int ab = fraction>>32;
+    //     fraction = (u32) fraction * 100ll;
+    //     int guess = guess2_6 >> clz*2;
+    //     ll frac = (u32) fraction * 25ll;
+    //     memcpy(&hi4, gDigitsLut + (ab)*2, 2);
+    //     memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>32)*2, 2);
+    //     off += guess & 3;
+    //     memcpy(&lo8a, gDigitsLut + DoNotOptimize(frac>>30)*2, 2);
+    //     hi4 |= tmp << 16;
+    //     int shift = off*8;
+    //     hi4 >>= 32-shift;
+    //     memcpy(buffer, &hi4, 4);
+    //     memcpy(buffer+off, &lo8a, 4);
+    // }
+    // else {
+    //     lo8a = val | '0';
+    //     memcpy(buffer, &lo8a, 4);
+    // }
+
+    // ll lo8a = 0, tmp = 0;
+    // u32 hi4 = 0;
+    // // memset(buffer+7, 0, 4);
+    // if (val > 999999) {
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val >= 999999999 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val > 9) {
+    //     ll fraction = val * e32d1e4;
+    //     int clz = __builtin_clz(val);
+    //     ll frac = val * e32d100;
+    //     val &= ~(1<<16);
+    //     u16 p10; memcpy(&p10, pLut2_6+clz, 2);
+    //     int off = val > p10;
+    //     const int ab = fraction>>32;
+    //     fraction = (u32) fraction * 25ll;
+    //     int guess = guess2_6 >> clz*2;
+    //     frac = (u32) frac * 25ll;
+    //     memcpy(&hi4, gDigitsLut + (ab)*2, 2);
+    //     memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>30)*2, 2);
+    //     off += guess & 3;
+    //     memcpy(&lo8a, gDigitsLut + DoNotOptimize(frac>>30)*2, 2);
+    //     hi4 |= tmp << 16;
+    //     int shift = off*8;
+    //     hi4 >>= 32-shift;
+    //     memcpy(buffer, &hi4, 4);
+    //     memcpy(buffer+off, &lo8a, 4);
+    // }
+    // else {
+    //     lo8a = val | '0';
+    //     memcpy(buffer, &lo8a, 4);
+    // }
+
+    // ll lo8a = 0, tmp = 0;
+    // u32 hi4 = 0;
+    // // memset(buffer+7, 0, 4);
+    // if (val > 999999) {
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val >= 999999999 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val > 9) {
+    //     ll fraction = val * e32d1e4;
+    //     int clz = __builtin_clz(val);
+    //     ll frac = val * e32d100;
+    //     val &= ~(1<<16);
+    //     u16 p10; memcpy(&p10, pLut2_6+clz, 2);
+    //     const int ab = fraction>>32;
+    //     fraction = (u32) fraction * 25ll;
+    //     int guess = guess2_6 >> clz*2;
+    //     frac = (u32) frac * 25ll;
+    //     int off = val > p10;
+    //     memcpy(&hi4, gDigitsLut + (ab)*2, 2);
+    //     memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>30)*2, 2);
+    //     off += guess & 3;
+    //     memcpy(&lo8a, gDigitsLut + DoNotOptimize(frac>>30)*2, 2);
+    //     DoNotOptimize(lo8a);
+    //     DoNotOptimize(hi4 |= tmp << 16);
+    //     int shift = off*8;
+    //     hi4 >>= 32-shift;
+    //     memcpy(buffer, &hi4, 4);
+    //     memcpy(buffer+off, &lo8a, 4);
+    // }
+    // else {
+    //     lo8a = val | '0';
+    //     memcpy(buffer, &lo8a, 4);
+    // }
+
+    // ll lo8a = 0, tmp = 0;
+    // // memset(buffer+7, 0, 4);
+    // if (val > 999999) {
+    //     memset(buffer+7, 0, 4);
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val >= 999999999 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val > 9) {
+    //     ll fraction = val * e32d1e4;
+    //     memcpy(&lo8a, gDigitsLut + DoNotOptimize(fraction>>32)*2, 2);
+    //     fraction = (u32) fraction * 100ll;
+    //     memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>32)*2, 2);
+    //     lo8a |= tmp << 16;
+    //     fraction = (u32) fraction * 25ll;
+    //     int off = __builtin_ctzll(lo8a & 0xf0f0f0f | 1ll<<32);
+    //     memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>30)*2, 2);
+    //     lo8a |= tmp << 32;
+    //     lo8a >>= off & 56;
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else {
+    //     lo8a = val | '0';
+    //     memcpy(buffer, &lo8a, 4);
+    // }
+
+    // 2.75
+    // ll lo8a = 0, tmp = 0;
+    // // memset(buffer+7, 0, 4);
+    // if (val > 999999) {
+    //     memset(buffer+7, 0, 4);
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val >= 999999999 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val > 9) {
+    //     ll fraction = val * e32d1e4;
+    //     memcpy(&lo8a, gDigitsLut + DoNotOptimize(fraction>>32)*2, 2);
+    //     fraction = (u32) fraction * 100ll;
+    //     memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>32)*2, 2);
+    //     lo8a |= tmp << 16;
+    //     fraction = (u32) fraction * 25ll;
+    //     const int off = __builtin_ctz(lo8a & 0xf0f0f0f);
+    //     memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>30)*2, 2);
+    //     lo8a |= tmp << 32;
+    //     lo8a >>= DoNotOptimize(off) & 56; // Prevents compilers from assuming off < 32
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else {
+    //     lo8a = val | '0';
+    //     memcpy(buffer, &lo8a, 4);
+    // }
+
+    // ll lo8a = 0, tmp = 0;
+    // // memset(buffer+7, 0, 4);
+    // if (val > 999999) {
+    //     memset(buffer+7, 0, 4);
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val >= 999999999 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val > 9) {
+    //     u128 fraction = val * e64d1e4;
+    //     memcpy(&lo8a, gDigitsLut + DoNotOptimize(fraction>>64)*2, 2);
+    //     fraction = (ull) fraction * (u128) 100;
+    //     memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>64)*2, 2);
+    //     lo8a |= tmp << 16;
+    //     fraction = (ull) fraction * (u128) 100;
+    //     const int off = __builtin_ctz(lo8a & 0xf0f0f0f);
+    //     memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>64)*2, 2);
+    //     lo8a |= tmp << 32;
+    //     lo8a >>= DoNotOptimize(off) & 56; // Prevents compilers from assuming off < 32
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else {
+    //     lo8a = val | '0';
+    //     memcpy(buffer, &lo8a, 4);
+    // }
+
+    // ll lo8a = 0, tmp = 0;
+    // // memset(buffer+7, 0, 4);
+    // if (val > 999999) {
+    //     memset(buffer+7, 0, 4);
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val >= 999999999 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val > 9) {
+    //     u128 fraction = (u128) val * e64d1e4;
+    //     memcpy(&lo8a, gDigitsLut + DoNotOptimize(fraction>>64)*2, 2);
+    //     fraction = (ull) fraction * (u128) 100;
+    //     memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>64)*2, 2);
+    //     lo8a |= tmp << 16;
+    //     fraction = (ull) fraction * (u128) 100;
+    //     const int off = __builtin_ctz(lo8a & 0xf0f0f0f);
+    //     memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>64)*2, 2);
+    //     lo8a |= tmp << 32;
+    //     lo8a >>= DoNotOptimize(off) & 56; // Prevents compilers from assuming off < 32
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else {
+    //     lo8a = val | '0';
+    //     memcpy(buffer, &lo8a, 4);
+    // }
+
+    // 2.91
+    // ll lo8a = 0, tmp = 0;
+    // u32 hi4 = 0;
+    // // memset(buffer+7, 0, 4);
+    // if (val > 999999) {
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val >= 999999999 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val > 9) {
+    //     ll fraction = val * e32d1e4;
+    //     int clz = __builtin_clz(val);
+    //     val &= ~(1<<16);
+    //     u16 p10; memcpy(&p10, pLut2_6+clz, 2);
+    //     int off = guess2_6[clz];
+    //     const int ab = fraction>>32;
+    //     fraction = (u32) fraction * 100ll;
+    //     off += val > p10;
+    //     ll frac = (u32) fraction * 25ll;
+    //     memcpy(&hi4, gDigitsLut + (ab)*2, 2);
+    //     memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>32)*2, 2);
+    //     memcpy(&lo8a, gDigitsLut + DoNotOptimize(frac>>30)*2, 2);
+    //     hi4 |= tmp << 16;
+    //     int shift = off*8;
+    //     hi4 >>= 32-shift;
+    //     memcpy(buffer, &hi4, 4);
+    //     memcpy(buffer+off, &lo8a, 4);
+    // }
+    // else {
+    //     lo8a = val | '0';
+    //     memcpy(buffer, &lo8a, 4);
+    // }
+
+    // ll lo8a = 0, tmp = 0;
+    // // memset(buffer+7, 0, 4);
+    // if (val > 999999) {
+    //     memset(buffer+7, 0, 4);
+    //     const u32 hi8 = val/100;
+    //     char * const buf = val >= 999999999 ? buffer : buffer-1;
+    //     const i32 q = (ll) hi8 * e40d10000 >> 40;
+    //     const i32 lo2 = val%100;
+    //     short lo2a; memcpy(&lo2a, gDigitsLut+lo2*2, 2);
+    //     const ll a = -e32m10000*q + ((ll) hi8 << 32 | q);
+    //     memcpy(buf+8, &lo2a, 2);
+    //     const ll b = a * e19d100 & 0x3f8000003f80000ll;
+    //     const ll b25 = b*25, c = (a<<17) - b25;
+    //     memcpy(buffer, (char *) dLut + ((i32)b>>18), 2);
+    //     memcpy(buf+2, gDigitsLut + ((i32)c>>16), 2);
+    //     memcpy(buf+4, gDigitsLut + (b>>50), 2);
+    //     memcpy(buf+6, gDigitsLut + (c>>48), 2);
+    // } else if (val > 9) {
+    //     ll fraction = val * e32d1e4;
+    //     memcpy(&lo8a, gDigitsLut + DoNotOptimize(fraction>>32)*2, 2);
+    //     fraction = (u32) fraction * 100ll;
+    //     memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>32)*2, 2);
+    //     lo8a |= tmp << 16;
+    //     fraction = (u32) fraction * 25ll;
+    //     const int off = __builtin_ctz(lo8a & 0xf0f0f0f);
+    //     memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>30)*2, 2);
+    //     lo8a |= tmp << 32;
+    //     lo8a >>= DoNotOptimize(off) & 56; // Prevents compilers from assuming off < 32
+    //     memcpy(buffer, &lo8a, 8);
+    // }
+    // else {
+    //     lo8a = val | '0';
+    //     memcpy(buffer, &lo8a, 4);
+    // }
+
     ll lo8a = 0, tmp = 0;
-    u32 hi4 = 0;
     // memset(buffer+7, 0, 4);
     if (val > 999999) {
+        memset(buffer+7, 0, 4);
         const u32 hi8 = val/100;
         char * const buf = val >= 999999999 ? buffer : buffer-1;
         const i32 q = (ll) hi8 * e40d10000 >> 40;
@@ -2367,23 +2714,16 @@ inline void u32toa_hintro(u32 val, char* buffer) {
         memcpy(buf+6, gDigitsLut + (c>>48), 2);
     } else if (val > 9) {
         ll fraction = val * e32d1e4;
-        int clz = __builtin_clz(val);
-        val &= ~(1<<16);
-        u16 p10; memcpy(&p10, pLut2_6+clz, 2);
-        int off = val > p10;
-        const int ab = fraction>>32;
+        memcpy(&lo8a, gDigitsLut + DoNotOptimize(fraction>>32)*2, 2);
         fraction = (u32) fraction * 100ll;
-        int guess = guess2_6 >> clz*2;
-        ll frac = (u32) fraction * 25ll;
-        memcpy(&hi4, gDigitsLut + (ab)*2, 2);
         memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>32)*2, 2);
-        off += guess & 3;
-        memcpy(&lo8a, gDigitsLut + DoNotOptimize(frac>>30)*2, 2);
-        hi4 |= tmp << 16;
-        int shift = off*8;
-        hi4 >>= 32-shift;
-        memcpy(buffer, &hi4, 4);
-        memcpy(buffer+off, &lo8a, 4);
+        lo8a |= tmp << 16;
+        fraction = (u32) fraction * 25ll;
+        const int off = __builtin_ctz(lo8a & 0xf0f0f0f);
+        memcpy(&tmp, gDigitsLut + DoNotOptimize(fraction>>30)*2, 2);
+        lo8a |= tmp << 32;
+        lo8a >>= DoNotOptimize(off) & 56; // Prevents compilers from assuming off < 32
+        memcpy(buffer, &lo8a, 8);
     }
     else {
         lo8a = val | '0';

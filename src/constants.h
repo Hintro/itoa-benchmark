@@ -7,6 +7,8 @@ using i32 = int32_t;
 using u32 = uint32_t;
 using ll = long long;
 using ull = unsigned long long;
+using i128 = __int128;
+using u128 = __uint128_t;
 
 // template <class T>
 // __attribute__((always_inline)) inline void DoNotOptimize(const T &value) {
@@ -21,7 +23,8 @@ __attribute__((always_inline)) inline T& DoNotOptimize(const T &value) {
 
 const i32 e19d100 = (1<<19) /100 + 1, e10d10 = 103, e23d1e3 = (1<<23) /1000 + 1;
 const ll e40d10000 = (1ll << 40) /10000 + 1, e32m10000 = (1ll << 32) * 10000, 
-ascii0s = 0x3030303030303030ll, e32d1e4 = (1ll<<32) /10000 + 1;
+ascii0s = 0x3030303030303030ll, e32d1e4 = (1ll<<32) /10000 + 1, e32d100 = (1ll<<32) /100 + 1,
+e64d1e4 = 1844674407370956ll;
 // e57d8 = 1441151881, e9d10 = 52,
 
 // const uint16_t dLut[] = {
@@ -109,15 +112,15 @@ b10100000 = 0xa0a0a0a0a0a0a0a0ull, lo4bit = 0x0f0f0f0f0f0f0f0full, _192 = 0xc0c0
 const int init_mask = 0xff;
 
 
-const u8 encoded9s[] = {
-    // 0xa0, 0x86, 0, 0x10, 0x27, 0, 0, 0xe8, 3, 0, 0x64
-    // 0,0,0, 0xa0, 0x86, 0, 0x10, 0x27, 0, 0, 0xe8, 3, 0, 0x64, 0,0,0
-    0,0,0, 0x9f, 0x86, 0, 0xf, 0x27, 0, 0, 0xe7, 3, 0, 99, 0,99,99
-};
+// const u8 encoded9s[] = {
+//     // 0xa0, 0x86, 0, 0x10, 0x27, 0, 0, 0xe8, 3, 0, 0x64
+//     // 0,0,0, 0xa0, 0x86, 0, 0x10, 0x27, 0, 0, 0xe8, 3, 0, 0x64, 0,0,0
+//     0,0,0, 0x9f, 0x86, 0, 0xf, 0x27, 0, 0, 0xe7, 3, 0, 99, 0,99,99
+// };
 
-const u8 * const pLut2_6 = encoded9s - 12;
+// const u8 * const pLut2_6 = encoded9s - 12;
 
-const ull guess2_6 = 0x1196AFF000000ll;
+// const ull guess2_6 = 0x1196AFF000000ll;
 
 // const u16 encoded9s[] = {
 //     // 0xa0, 0x86, 0, 0x10, 0x27, 0, 0, 0xe8, 3, 0, 0x64
@@ -128,3 +131,11 @@ const ull guess2_6 = 0x1196AFF000000ll;
 // const u16 * const pLut2_6 = encoded9s - 12;
 
 // const ull guess2_6 = 0x1196EFF000000ll;
+
+const u8 lut2_6[] = {
+    3,3,3,3,2,2,2,1,1,2,1,0,1,0,0,0,0, 0x9f, 0x86, 0, 0xf, 0x27, 0, 0, 0xe7, 3, 0, 99, 0,99,99
+};
+
+const u8 * const pLut2_6 = lut2_6 + 2;
+
+const u8 * const guess2_6 = lut2_6 - 12;
