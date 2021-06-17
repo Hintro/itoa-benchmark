@@ -1,11 +1,12 @@
 #include <stdint.h>
 #include <limits.h>
 
-using ll = long long;
-using ull = unsigned long long;
+using u8 = uint8_t;
+using u16 = uint16_t;
 using i32 = int32_t;
 using u32 = uint32_t;
-using u8 = uint8_t;
+using ll = long long;
+using ull = unsigned long long;
 
 // template <class T>
 // __attribute__((always_inline)) inline void DoNotOptimize(const T &value) {
@@ -117,3 +118,13 @@ const u8 encoded9s[] = {
 const u8 * const pLut2_6 = encoded9s - 12;
 
 const ull guess2_6 = 0x1196AFF000000ll;
+
+// const u16 encoded9s[] = {
+//     // 0xa0, 0x86, 0, 0x10, 0x27, 0, 0, 0xe8, 3, 0, 0x64
+//     // 0,0,0, 0xa0, 0x86, 0, 0x10, 0x27, 0, 0, 0xe8, 3, 0, 0x64, 0,0,0
+//     0,0,0, 15, 0x1869, 0, 9999, 0, 0, 0, 999, 0, 0, 99, 0,99,99
+// };
+
+// const u16 * const pLut2_6 = encoded9s - 12;
+
+// const ull guess2_6 = 0x1196EFF000000ll;
